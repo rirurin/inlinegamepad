@@ -4,14 +4,13 @@
         <meta charset="utf-8">
         <style>
             body {
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-end;
                 background-color: yellow;
             }
             img {
                 width: 50px;
                 height: 50px;
+                position: absolute;
+                transition: transform 0.2s;
             }
         </style>
         <script>
@@ -36,6 +35,7 @@
             ]
             var pastInputs = [];
             var limit = 25;
+            var inputs = 0;
             window.addEventListener("gamepadconnected", function(e) {
                 let gp = navigator.getGamepads()[0];
                 for (i = 0; i < gp.buttons.length; i++) {
@@ -47,7 +47,11 @@
             
             function gameLoop() {
                 let gp = navigator.getGamepads()[0];
-                // console.log(gp.buttons[0].pressed);
+                var d = document.getElementsByClassName("initial")[0];
+                if (d !== undefined) {
+                    d.setAttribute("class", "set");
+                    d.setAttribute("style", `transform: translateX(${1200 - (50 * (inputs - d.getAttribute("id") + 1))}px)`);
+                }
                 for (i = 0; i < gp.buttons.length; i++) {
                     if (gp.buttons[i].pressed == true && activeButtons[i] == false) {
                         // rising edge
@@ -57,18 +61,28 @@
                             pastInputs.splice(0, 1);
                         }
                         activeButtons[i] = true;
-                        // document.body.innerHTML += buttonList[i]
+                        inputs += 1;
+
+                        if (pastInputs.length == limit) {
+                            var b = document.getElementsByTagName("img")[0];
+                            document.body.removeChild(b);
+                        }
+                        var a = document.createElement("img");
+                        a.setAttribute("src", `ctrl${pastInputs[pastInputs.length - 1]}.png`);
+                        console.log("added")
+                        a.setAttribute("id", inputs);
+                        a.setAttribute("style", `transform: translateX(1200px)`);
+                        a.setAttribute("class", "initial");
+                        document.body.appendChild(a);
+                        for (j = 0; j < document.getElementsByTagName("img").length - 1; j++) {
+                            var c = document.getElementsByTagName("img")[j];
+                            c.setAttribute("style", `transform: translateX(${1200 - (50 * (inputs - c.getAttribute("id") + 1))}px)`);
+                        }
                     }
                     if (gp.buttons[i].pressed == false && activeButtons[i] == true) {
                         // falling edge
                         activeButtons[i] = false;
                     }
-                }
-                document.body.innerHTML = "";
-                for (i = 0; i < pastInputs.length; i++) {
-                    var a = document.createElement("img");
-                    a.setAttribute("src", `ctrl${pastInputs[i]}.png`)
-                    document.body.appendChild(a);
                 }
                 let start = requestAnimationFrame(gameLoop);
             }
@@ -76,6 +90,5 @@
         </script>
     </head>
     <body>
-        
     </body>
 </html>
