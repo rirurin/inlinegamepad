@@ -7,8 +7,8 @@
                 background-color: yellow;
             }
             img {
-                width: 50px;
-                height: 50px;
+                width: 180px;
+                height: 180px;
                 position: absolute;
                 transition: transform 0.2s;
             }
@@ -50,7 +50,7 @@
                 var d = document.getElementsByClassName("initial")[0];
                 if (d !== undefined) {
                     d.setAttribute("class", "set");
-                    d.setAttribute("style", `transform: translateX(${1200 - (50 * (inputs - d.getAttribute("id") + 1))}px)`);
+                    d.setAttribute("style", `transform: translateX(${3800 - (180 * (inputs - d.getAttribute("id") + 1))}px)`);
                 }
                 for (i = 0; i < gp.buttons.length; i++) {
                     if (gp.buttons[i].pressed == true && activeButtons[i] == false) {
@@ -63,20 +63,25 @@
                         activeButtons[i] = true;
                         inputs += 1;
 
-                        if (pastInputs.length == limit) {
-                            var b = document.getElementsByTagName("img")[0];
-                            document.body.removeChild(b);
-                        }
-                        var a = document.createElement("img");
-                        a.setAttribute("src", `ctrl${pastInputs[pastInputs.length - 1]}.png`);
-                        console.log("added")
-                        a.setAttribute("id", inputs);
-                        a.setAttribute("style", `transform: translateX(1200px)`);
-                        a.setAttribute("class", "initial");
-                        document.body.appendChild(a);
-                        for (j = 0; j < document.getElementsByTagName("img").length - 1; j++) {
-                            var c = document.getElementsByTagName("img")[j];
-                            c.setAttribute("style", `transform: translateX(${1200 - (50 * (inputs - c.getAttribute("id") + 1))}px)`);
+                        if (buttonList[i] != "L3") {
+                            if (pastInputs.length == limit) {
+                                var b = document.getElementsByTagName("img")[0];
+                                document.body.removeChild(b);
+                            }
+                            var a = document.createElement("img");
+                            a.setAttribute("src", `ctrl${pastInputs[pastInputs.length - 1]}.png`);
+                            console.log("added")
+                            a.setAttribute("id", inputs);
+                            a.setAttribute("style", `transform: translateX(3800px)`);
+                            a.setAttribute("class", "initial");
+                            document.body.appendChild(a);
+                            for (j = 0; j < document.getElementsByTagName("img").length - 1; j++) {
+                                var c = document.getElementsByTagName("img")[j];
+                                c.setAttribute("style", `transform: translateX(${3800 - (180 * (inputs - c.getAttribute("id") + 1))}px)`);
+                            }
+                        } else {
+                            pastInputs = [];
+                            document.body.innerHTML = "";
                         }
                     }
                     if (gp.buttons[i].pressed == false && activeButtons[i] == true) {
